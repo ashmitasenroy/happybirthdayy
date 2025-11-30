@@ -1,0 +1,348 @@
+
+.main-container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; /* Prevents scrolling */
+  background-color: black;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  position: relative;
+  color: white;
+}
+
+
+.city-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+/* =========================================
+   3. BUTTONS (Start & Intro)
+   ========================================= */
+.start-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.start-btn,
+.lights-btn {
+  padding: 15px 40px;
+  font-size: 1.5rem;
+  background: #E50914; 
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  z-index: 50;
+  box-shadow: 0 0 20px rgba(223, 218, 218, 0.4);
+  font-weight: bold;
+  transition: transform 0.2s ease;
+}
+
+.start-btn:hover,
+.lights-btn:hover {
+  transform: scale(1.05);
+  background: #c90812;
+}
+
+.lights-btn {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: fadeIn 1s;
+}
+
+/* =========================================
+   4. SCENES (SPOTLIGHT, CHAT, VIDEO)
+   ========================================= */
+.spotlight-scene {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.spotlight-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: radial-gradient(circle at 50% 30%, transparent 150px, rgba(0, 0, 0, 0.98) 450px);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.spidey-hang-wrapper {
+  position: absolute;
+  top: -60px;
+  z-index: 5;
+  animation: swing 4s infinite ease-in-out;
+}
+
+.spidey-hang-img { width: 280px; filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1)); }
+
+@keyframes swing {
+  0% { transform: rotate(2deg); }
+  50% { transform: rotate(-2deg); }
+  100% { transform: rotate(2deg); }
+}
+
+.bubbles-container { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 20; }
+.bubble {
+  position: absolute; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px);
+  border: 1px solid rgba(32, 161, 196, 0.3); padding: 15px 25px; border-radius: 30px;
+  animation: floatUp 3s ease-out forwards; opacity: 0;
+}
+.b1 { top: 50%; left: 20%; } .b2 { top: 40%; right: 25%; } .b3 { top: 60%; left: 40%; font-size: 1.2rem; font-weight: bold; } .b4 { top: 55%; right: 10%; }
+
+.city-scene { position: relative; width: 100%; height: 100%; }
+.glass-sheet {
+  position: absolute; width: 100%; height: 100%;
+  background: rgba(10, 25, 41, 0.3);
+  backdrop-filter: blur(5px);
+  z-index: 2;
+}
+
+.chat-layout {
+  position: relative; z-index: 10; height: 100%;
+  display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+}
+
+.chat-bubble-glass {
+  background: rgba(0, 0, 0, 0.6); border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px); padding: 20px 40px; border-radius: 20px;
+  max-width: 80%; text-align: center; margin-bottom: 20px; font-size: 1.3rem;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.1); min-height: 80px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.character-stage {
+  height: 380px; display: flex; align-items: flex-end; justify-content: center; width: 100%; overflow: hidden;
+}
+.active-character {
+  height: 90%; width: auto; max-width: 90vw;
+  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.5));
+  mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+}
+
+.flip-animation-active { animation: flipIn 1s cubic-bezier(0.4, 0, 0.2, 1); }
+@keyframes flipIn {
+  0% { transform: perspective(1000px) rotateY(90deg); opacity: 0; }
+  100% { transform: perspective(1000px) rotateY(0deg); opacity: 1; }
+}
+
+.video-scene { position: relative; width: 100%; height: 100%; background: black; }
+.fullscreen-video { width: 100%; height: 100%; object-fit: cover; }
+.video-overlay-text { position: absolute; bottom: 50px; left: 50px; color: white; opacity: 0.7; }
+
+/* =========================================
+   5. MUSIC PLAYER (COMPACT & CHIC)
+   ========================================= */
+
+/* Dark overlay */
+.glass-sheet-dark {
+  position: absolute; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Lighter to show bg */
+  backdrop-filter: blur(20px); /* Reduced blur to see bg details */
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 2;
+}
+
+.music-player-scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.apple-player-container {
+  position: relative;
+  z-index: 10;
+  /* COMPACT SIZE */
+  width: 320px; 
+  background: rgba(30, 30, 30, 0.4); /* Elegant translucent dark */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  padding: 30px 25px; /* Tighter padding */
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s;
+}
+
+/* Album Art - Smaller & Tighter */
+.album-art-wrapper {
+  width: 220px;
+  height: 220px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+  margin-bottom: 20px; /* Reduced gap */
+  background: #111;
+}
+
+.album-art {
+  width: 100%; height: 100%; object-fit: cover; opacity: 1;
+  transition: transform 0.5s ease;
+}
+.album-art.playing { transform: scale(1.05); }
+
+/* Track Info */
+.track-info {
+  text-align: center;
+  margin-bottom: 15px; /* Reduced gap */
+  width: 100%;
+}
+
+.track-info h2 {
+  margin: 0;
+  font-size: 1.3rem; /* Smaller font */
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.5px;
+}
+
+.track-info p {
+  margin: 4px 0 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+/* Seek Slider */
+.progress-bar-container {
+  width: 100%;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.seek-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.seek-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  margin-top: -4px;
+}
+
+.time-stamps {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 35px; /* Tighter buttons */
+  width: 100%;
+}
+
+.control-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.control-btn:hover {
+  color: white;
+  transform: scale(1.1);
+}
+
+.play-pause-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background: white;
+  color: black;
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
+.play-pause-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+}
+
+/* =========================================
+   6. EXPLORE BUTTON (TOP RIGHT)
+   ========================================= */
+.explore-now-btn {
+  position: fixed; /* Stick to corner */
+  top: 30px;
+  right: 30px;
+  margin: 0;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  z-index: 100;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.explore-now-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(2px);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+/* Button for Scene 4 */
+.explore-btn {
+  margin-top: 30px; padding: 15px 40px; background: linear-gradient(135deg, #10b981, #059669);
+  color: white; border: none; border-radius: 15px; font-weight: bold; font-size: 1.1rem;
+  box-shadow: 0 5px 15px rgba(93, 228, 183, 0.4); cursor: pointer; z-index: 20; transition: transform 0.2s;
+}
+.explore-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.6); }
+
+/* Animation Utils */
+@keyframes floatUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+.pop-in { animation: popCharacter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes popCharacter { from { opacity: 0; transform: translateY(50px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.fade-in-up { animation: fadeInUp 0.6s ease-out; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
