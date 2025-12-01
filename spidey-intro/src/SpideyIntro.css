@@ -1,38 +1,60 @@
-
-.main-container {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden; /* Prevents scrolling */
-  background-color: black;
+/* =========================================
+   0. GLOBAL RESET (CRITICAL FOR BLACK SCREEN)
+   ========================================= */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black; /* Ensures deep black background everywhere */
+  overflow: hidden; /* Kills all scrollbars */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  position: relative;
-  color: white;
+  -webkit-font-smoothing: antialiased;
 }
 
+/* =========================================
+   1. MAIN CONTAINER
+   ========================================= */
+.main-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
 
 .city-bg {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   z-index: 1;
+  opacity: 0.8;
 }
 
 /* =========================================
-   3. BUTTONS (Start & Intro)
+   2. BUTTONS (Start & Intro)
    ========================================= */
 .start-screen {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
+  width: 100%;
+  background: black;
+  position: relative;
+  z-index: 100;
 }
 
 .start-btn,
 .lights-btn {
-  padding: 15px 40px;
+  padding: 15px 45px;
   font-size: 1.5rem;
   background: #E50914; 
   color: white;
@@ -40,34 +62,36 @@
   border-radius: 50px;
   cursor: pointer;
   z-index: 50;
-  box-shadow: 0 0 20px rgba(223, 218, 218, 0.4);
+  box-shadow: 0 0 25px rgba(229, 9, 20, 0.6);
   font-weight: bold;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
 }
 
-.start-btn:hover,
-.lights-btn:hover {
-  transform: scale(1.05);
-  background: #c90812;
+.start-btn:active,
+.lights-btn:active {
+  transform: scale(0.95);
 }
 
 .lights-btn {
   position: absolute;
-  bottom: 10%;
+  bottom: 15%;
   left: 50%;
   transform: translateX(-50%);
   animation: fadeIn 1s;
 }
 
 /* =========================================
-   4. SCENES (SPOTLIGHT, CHAT, VIDEO)
+   3. SCENE 0: SPOTLIGHT & SPIDEY
    ========================================= */
 .spotlight-scene {
   width: 100%;
   height: 100%;
   position: relative;
+  background-color: black;
   display: flex;
   justify-content: center;
+  overflow: hidden;
 }
 
 .spotlight-overlay {
@@ -76,19 +100,26 @@
   height: 100%;
   top: 0;
   left: 0;
-  background: radial-gradient(circle at 50% 30%, transparent 150px, rgba(0, 0, 0, 0.98) 450px);
+  background: radial-gradient(circle at 50% 30%, transparent 100px, rgba(0, 0, 0, 0.98) 60%);
   z-index: 10;
   pointer-events: none;
 }
 
 .spidey-hang-wrapper {
   position: absolute;
-  top: -60px;
+  top: -10vh; /* Responsive top positioning */
   z-index: 5;
   animation: swing 4s infinite ease-in-out;
+  display: flex;
+  justify-content: center;
 }
 
-.spidey-hang-img { width: 280px; filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1)); }
+.spidey-hang-img { 
+  width: 35vh; /* Scales based on screen height */
+  max-width: 300px;
+  min-width: 180px;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1)); 
+}
 
 @keyframes swing {
   0% { transform: rotate(2deg); }
@@ -96,43 +127,91 @@
   100% { transform: rotate(2deg); }
 }
 
-.bubbles-container { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 20; }
+.bubbles-container { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 20; pointer-events: none;}
 .bubble {
-  position: absolute; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px);
-  border: 1px solid rgba(32, 161, 196, 0.3); padding: 15px 25px; border-radius: 30px;
-  animation: floatUp 3s ease-out forwards; opacity: 0;
+  position: absolute; 
+  background: rgba(255, 255, 255, 0.1); 
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(32, 161, 196, 0.3); 
+  padding: 15px 25px; 
+  border-radius: 30px;
+  animation: floatUp 3s ease-out forwards; 
+  opacity: 0;
+  white-space: nowrap;
+  font-size: 1rem;
 }
-.b1 { top: 50%; left: 20%; } .b2 { top: 40%; right: 25%; } .b3 { top: 60%; left: 40%; font-size: 1.2rem; font-weight: bold; } .b4 { top: 55%; right: 10%; }
 
-.city-scene { position: relative; width: 100%; height: 100%; }
+/* Responsive Bubble Positioning */
+.b1 { top: 50%; left: 15%; } 
+.b2 { top: 40%; right: 15%; } 
+.b3 { top: 60%; left: 50%; transform: translateX(-50%); font-size: 1.5rem; font-weight: bold; border-color: #E50914;} 
+.b4 { top: 55%; right: 10%; }
+
+/* =========================================
+   4. CHAT & CHARACTER SCENES
+   ========================================= */
+.city-scene { 
+  position: absolute; 
+  width: 100%; 
+  height: 100%; 
+  overflow: hidden;
+}
+
 .glass-sheet {
   position: absolute; width: 100%; height: 100%;
-  background: rgba(10, 25, 41, 0.3);
-  backdrop-filter: blur(5px);
+  background: rgba(10, 25, 41, 0.4);
+  backdrop-filter: blur(8px);
   z-index: 2;
 }
 
 .chat-layout {
-  position: relative; z-index: 10; height: 100%;
-  display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+  position: relative; 
+  z-index: 10; 
+  height: 100%;
+  width: 100%;
+  display: flex; 
+  flex-direction: column; 
+  justify-content: flex-end; 
+  align-items: center;
+  padding-bottom: 20px;
 }
 
 .chat-bubble-glass {
-  background: rgba(0, 0, 0, 0.6); border: 2px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(15px); padding: 20px 40px; border-radius: 20px;
-  max-width: 80%; text-align: center; margin-bottom: 20px; font-size: 1.3rem;
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.1); min-height: 80px;
-  display: flex; align-items: center; justify-content: center;
+  background: rgba(0, 0, 0, 0.7); 
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px); 
+  padding: 20px 30px; 
+  border-radius: 20px;
+  width: 85%; 
+  max-width: 600px; 
+  text-align: center; 
+  margin-bottom: 5vh; 
+  font-size: 1.2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
+  min-height: 60px;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  line-height: 1.4;
 }
 
 .character-stage {
-  height: 380px; display: flex; align-items: flex-end; justify-content: center; width: 100%; overflow: hidden;
+  height: 45vh; /* Takes up 45% of vertical screen */
+  display: flex; 
+  align-items: flex-end; 
+  justify-content: center; 
+  width: 100%; 
+  overflow: hidden;
 }
+
 .active-character {
-  height: 90%; width: auto; max-width: 90vw;
+  height: 100%; 
+  width: auto; 
+  max-width: 100%;
+  object-fit: contain;
   filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.5));
-  mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
 }
 
 .flip-animation-active { animation: flipIn 1s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -141,20 +220,40 @@
   100% { transform: perspective(1000px) rotateY(0deg); opacity: 1; }
 }
 
-.video-scene { position: relative; width: 100%; height: 100%; background: black; }
-.fullscreen-video { width: 100%; height: 100%; object-fit: cover; }
-.video-overlay-text { position: absolute; bottom: 50px; left: 50px; color: white; opacity: 0.7; }
+/* =========================================
+   5. VIDEO SCENE
+   ========================================= */
+.video-scene { 
+  position: absolute; 
+  width: 100%; 
+  height: 100%; 
+  background: black; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fullscreen-video { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+}
+.video-overlay-text { 
+  position: absolute; 
+  bottom: 80px; 
+  left: 30px; 
+  color: white; 
+  opacity: 0.8; 
+  z-index: 20;
+}
 
 /* =========================================
-   5. MUSIC PLAYER (COMPACT & CHIC)
+   6. MUSIC PLAYER SCENE (Responsive)
    ========================================= */
-
-/* Dark overlay */
 .glass-sheet-dark {
   position: absolute; width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Lighter to show bg */
-  backdrop-filter: blur(20px); /* Reduced blur to see bg details */
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
   z-index: 2;
 }
 
@@ -170,177 +269,147 @@
 .apple-player-container {
   position: relative;
   z-index: 10;
-  /* COMPACT SIZE */
-  width: 320px; 
-  background: rgba(30, 30, 30, 0.4); /* Elegant translucent dark */
+  /* Adaptive Width */
+  width: 90%; 
+  max-width: 380px; 
+  background: rgba(40, 40, 40, 0.6); 
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 30px;
-  padding: 30px 25px; /* Tighter padding */
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+  border-radius: 35px;
+  padding: 40px 30px; 
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
   display: flex;
   flex-direction: column;
   align-items: center;
   transition: transform 0.3s;
 }
 
-/* Album Art - Smaller & Tighter */
 .album-art-wrapper {
-  width: 220px;
-  height: 220px;
-  border-radius: 15px;
+  width: 240px;
+  height: 240px;
+  border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-  margin-bottom: 20px; /* Reduced gap */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  margin-bottom: 25px;
   background: #111;
 }
 
 .album-art {
-  width: 100%; height: 100%; object-fit: cover; opacity: 1;
-  transition: transform 0.5s ease;
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.album-art.playing { transform: scale(1.05); }
+.album-art.playing { transform: scale(1.1); }
 
-/* Track Info */
-.track-info {
-  text-align: center;
-  margin-bottom: 15px; /* Reduced gap */
-  width: 100%;
-}
+.track-info { text-align: center; margin-bottom: 20px; width: 100%; }
+.track-info h2 { margin: 0; font-size: 1.4rem; font-weight: 700; color: white; margin-bottom: 5px; }
+.track-info p { margin: 0; color: rgba(255, 255, 255, 0.6); font-size: 1rem; }
 
-.track-info h2 {
-  margin: 0;
-  font-size: 1.3rem; /* Smaller font */
-  font-weight: 700;
-  color: white;
-  letter-spacing: 0.5px;
-}
-
-.track-info p {
-  margin: 4px 0 0;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.9rem;
-}
-
-/* Seek Slider */
-.progress-bar-container {
-  width: 100%;
-  margin-bottom: 5px;
-  display: flex;
-  align-items: center;
-}
-
+.progress-bar-container { width: 100%; margin-bottom: 8px; display: flex; align-items: center; }
 .seek-slider {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
-  outline: none;
-  cursor: pointer;
+  -webkit-appearance: none; width: 100%; height: 4px; background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px; outline: none; cursor: pointer;
 }
-
 .seek-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 12px; height: 12px;
-  border-radius: 50%;
-  background: #fff;
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  margin-top: -4px;
+  -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #fff;
+  cursor: pointer; box-shadow: 0 0 10px rgba(0,0,0,0.5); margin-top: -5px;
 }
 
 .time-stamps {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
-  margin-bottom: 20px;
-  font-weight: 500;
+  width: 100%; display: flex; justify-content: space-between; font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4); margin-bottom: 25px; font-weight: 500;
 }
 
-/* Controls */
-.controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 35px; /* Tighter buttons */
-  width: 100%;
-}
-
+.controls { display: flex; align-items: center; justify-content: center; gap: 40px; width: 100%; }
 .control-btn {
-  background: none;
-  border: none;
-  font-size: 2rem;
-  color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
-  transition: transform 0.2s, color 0.2s;
+  background: none; border: none; font-size: 2.2rem; color: rgba(255, 255, 255, 0.7);
+  cursor: pointer; transition: transform 0.2s, color 0.2s;
 }
-
-.control-btn:hover {
-  color: white;
-  transform: scale(1.1);
-}
+.control-btn:hover { color: white; transform: scale(1.1); }
 
 .play-pause-btn {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: none;
-  background: white;
-  color: black;
-  font-size: 1.8rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+  width: 65px; height: 65px; border-radius: 50%; border: none; background: white; color: black;
+  font-size: 2rem; display: flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: transform 0.2s; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
 }
-
-.play-pause-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 12px 25px rgba(0,0,0,0.3);
-}
+.play-pause-btn:hover { transform: scale(1.1); }
 
 /* =========================================
-   6. EXPLORE BUTTON (TOP RIGHT)
+   7. NAVIGATION BUTTONS
    ========================================= */
 .explore-now-btn {
-  position: fixed; /* Stick to corner */
-  top: 30px;
-  right: 30px;
-  margin: 0;
-  padding: 10px 20px;
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  padding: 12px 24px;
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
-  border-radius: 20px;
+  border-radius: 30px;
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   cursor: pointer;
-  z-index: 100;
+  z-index: 200;
   transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
 .explore-now-btn:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.2);
   transform: translateY(2px);
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
-/* Button for Scene 4 */
 .explore-btn {
-  margin-top: 30px; padding: 15px 40px; background: linear-gradient(135deg, #10b981, #059669);
-  color: white; border: none; border-radius: 15px; font-weight: bold; font-size: 1.1rem;
-  box-shadow: 0 5px 15px rgba(93, 228, 183, 0.4); cursor: pointer; z-index: 20; transition: transform 0.2s;
+  margin-top: 20px; padding: 15px 40px; 
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white; border: none; border-radius: 30px; 
+  font-weight: bold; font-size: 1rem;
+  box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4); 
+  cursor: pointer; z-index: 20; 
 }
-.explore-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.6); }
 
-/* Animation Utils */
+/* =========================================
+   8. MEDIA QUERIES (Mobile vs Desktop)
+   ========================================= */
+
+/* For Small Phones (Google Pixel, iPhone Mini) */
+@media (max-width: 480px) {
+  .chat-bubble-glass {
+    font-size: 1rem;
+    padding: 15px;
+    width: 90%;
+    margin-bottom: 2vh;
+  }
+  .character-stage {
+    height: 40vh;
+  }
+  .spidey-hang-img { width: 200px; }
+  
+  .apple-player-container {
+    width: 85%;
+    padding: 30px 20px;
+  }
+  .album-art-wrapper {
+    width: 180px;
+    height: 180px;
+  }
+  .controls { gap: 25px; }
+}
+
+/* For Laptops/Desktops (Improve Layout) */
+@media (min-width: 1024px) {
+  .chat-bubble-glass {
+    font-size: 1.5rem;
+    max-width: 700px;
+  }
+  .character-stage {
+    height: 50vh;
+  }
+  .spidey-hang-img {
+    width: 320px;
+  }
+}
+
+/* Animations */
 @keyframes floatUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
 .pop-in { animation: popCharacter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 @keyframes popCharacter { from { opacity: 0; transform: translateY(50px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }

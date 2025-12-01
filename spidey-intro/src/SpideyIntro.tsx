@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./SpideyIntro.css";
 
-// --- EXISTING ASSETS ---
+// --- EXISTING ASSETS (Ensure paths are correct) ---
 import spideyHang from "./assets/spidey_hang.png";
 import cityBg from "./assets/city_night.jpeg"; 
 import batmanStand from "./assets/batman_stand.png";
@@ -10,7 +10,7 @@ import batmanCute from "./assets/batman_cute.png";
 
 // --- NEW SCENE ASSETS ---
 import blackPanther from "./assets/black_panther.png";
-import cuteCat from "./assets/cute_cat.png"; // Reusing cute cat if needed or different one
+import cuteCat from "./assets/cute_cat.png"; 
 import duoImg from "./assets/spidey_batman_duo.png";
 import natureBg from "./assets/nature_bg.jpeg"; 
 import thomYorke from "./assets/thom_yorke.png";
@@ -35,11 +35,7 @@ const PLAYLIST = [
   { title: "This Isn't The Place", artist: "Nine Inch Nails", cover: album3, src: song3 },
 ];
 
-interface SpideyIntroProps {
-  onExplore: () => void;
-}
-
-export default function SpideyIntro({ onExplore }: SpideyIntroProps) {
+export default function SpideyIntro({ onExplore }) {
   // SCENE STATE: 0=Intro, 1=LightsOn, 2=CatFlip, 3=Video, 4=RadioheadChat, 5=MusicPlayer
   const [scene, setScene] = useState(0); 
   
@@ -55,7 +51,7 @@ export default function SpideyIntro({ onExplore }: SpideyIntroProps) {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   
-  const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
+  const audioPlayerRef = useRef(null);
 
   // --- SCENE 0: INTRO TIMERS ---
   useEffect(() => {
@@ -104,7 +100,7 @@ export default function SpideyIntro({ onExplore }: SpideyIntroProps) {
       const introAudio = new Audio(weirdSong);
       introAudio.volume = 1.0; 
       introAudio.currentTime = 0;
-      introAudio.play().catch(e => console.log("Audio block", e));
+      introAudio.play().catch(e => console.log("Audio play blocked", e));
 
       const timer = setTimeout(() => {
         introAudio.pause();
@@ -135,7 +131,7 @@ export default function SpideyIntro({ onExplore }: SpideyIntroProps) {
     if (scene === 5 && audioPlayerRef.current) {
       audioPlayerRef.current.src = PLAYLIST[currentSongIdx].src;
       audioPlayerRef.current.volume = 1.0; 
-      audioPlayerRef.current.play();
+      audioPlayerRef.current.play().catch(e => console.log("Auto-play blocked", e));
       setIsPlaying(true);
     }
   }, [currentSongIdx, scene]);
@@ -165,7 +161,7 @@ export default function SpideyIntro({ onExplore }: SpideyIntroProps) {
     }
   };
 
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSeek = (e) => {
     const newTime = Number(e.target.value);
     setCurrentTime(newTime);
     if (audioPlayerRef.current) {
@@ -173,7 +169,7 @@ export default function SpideyIntro({ onExplore }: SpideyIntroProps) {
     }
   };
 
-  const formatTime = (time: number) => {
+  const formatTime = (time) => {
     if (!time || isNaN(time)) return "0:00";
     const min = Math.floor(time / 60);
     const sec = Math.floor(time % 60);
@@ -194,15 +190,17 @@ export default function SpideyIntro({ onExplore }: SpideyIntroProps) {
 
   return (
     <div className="main-container">
+      {/* Audio element for music player */}
       <audio ref={audioPlayerRef} onEnded={nextSong} onTimeUpdate={onTimeUpdate} />
 
-      {/* SCENE 0 */}
+      {/* SCENE 0: START BUTTON */}
       {scene === 0 && !step && (
         <div className="start-screen">
           <button onClick={() => setStep(1)} className="start-btn">Start Show</button>
         </div>
       )}
 
+      {/* SCENE 0: ANIMATION */}
       {scene === 0 && step > 0 && (
         <div className="spotlight-scene">
           <div className="spotlight-overlay"></div>
@@ -221,7 +219,7 @@ export default function SpideyIntro({ onExplore }: SpideyIntroProps) {
         </div>
       )}
 
-      {/* SCENE 1 */}
+      {/* SCENE 1: CITY CHAT */}
       {scene === 1 && (
         <div className="city-scene">
           <img src={cityBg} alt="City" className="city-bg" />
@@ -232,7 +230,7 @@ export default function SpideyIntro({ onExplore }: SpideyIntroProps) {
               {chatStep === 1 && "Batman: Spideyyyy!!! Did you wish him?"}
               {chatStep === 2 && "Spidey: Oh noooo!! I---"}
               {chatStep === 3 && "Spidey: I-- I am gay for you and yeah Happy Anniversary!"}
-              {chatStep === 4 && "Batman: Idiot! That's not what today is , wait what -- ehh"}
+              {chatStep === 4 && "Batman: Idiot! That's not what today is, wait what -- ehh"}
             </div>
             <div className="character-stage">
               <img key={chatStep} src={getChatImage()} className="active-character pop-in" alt="char" />
@@ -241,7 +239,7 @@ export default function SpideyIntro({ onExplore }: SpideyIntroProps) {
         </div>
       )}
 
-      {/* SCENE 2 */}
+      {/* SCENE 2: CAT SCENE */}
       {scene === 2 && (
         <div className="city-scene flip-animation-active">
           <img src={cityBg} alt="City" className="city-bg" />
@@ -262,7 +260,7 @@ export default function SpideyIntro({ onExplore }: SpideyIntroProps) {
       {/* SCENE 3: VIDEO */}
       {scene === 3 && (
         <div className="video-scene">
-          <video autoPlay muted loop className="fullscreen-video">
+          <video autoPlay muted loop playsInline className="fullscreen-video">
             <source src={videoFile} type="video/mp4" />
           </video>
           <div className="video-overlay-text">
@@ -279,7 +277,7 @@ export default function SpideyIntro({ onExplore }: SpideyIntroProps) {
           <div className="chat-layout">
             <div className="chat-bubble-glass fade-in-up">
                {rhStep === 1 && "Thom Yorke: The hardest part about being in Radiohead is listening to my own music."}
-               {rhStep === 2 && "Radiohead: Hi dude ignore him , Happy Birthdayy!! have a great one"}
+               {rhStep === 2 && "Radiohead: Hi dude ignore him, Happy Birthdayy!! Have a great one"}
             </div>
             <div className="character-stage">
                <img src={rhStep === 1 ? thomYorke : radioheadGroup} className="active-character pop-in" alt="radiohead" />
@@ -328,7 +326,7 @@ export default function SpideyIntro({ onExplore }: SpideyIntroProps) {
               </div>
            </div>
             
-           {/* THIS BUTTON TRIGGERS THE BIRTHDAY DECOR PAGE */}
+           {/* TRIGGER EXPLORE / NEXT PAGE */}
            <button className="explore-now-btn" onClick={onExplore}>
              Explore Now
            </button>
